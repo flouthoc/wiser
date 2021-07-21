@@ -16,9 +16,9 @@ Usage: wiser [OPTION...] --image path-to-kernel-image
 wiser - Extremely tiny type-2 hypervisor for linux. Will boot your
 unikernel/linux someday.
 
-  -c, --no-cpu               Number of cpu for your vm
+  -c, --vcpu                 Number of cpu for your vm
   -i, --image=IMAGE          linux kernel bzImage
-  -r, --ram-size             Ram size for your vm
+  -r, --memory               Ram size for your vm
   -v, --verbose              Produce verbose output
   -?, --help                 Give this help list
       --usage                Give a short usage message

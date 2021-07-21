@@ -31,14 +31,14 @@ static char args_doc[] = "--image path-to-kernel-image";
 /* The options we understand. */
 static struct argp_option options[] = {
     {"verbose", 'v', 0, 0, "Produce verbose output"},
-    {"ram-size", 'r', 0, 0, "Ram size for your vm"},
-    {"no-cpu", 'c', 0, 0, "Number of cpu for your vm"},
+    {"memory", 'r', 0, 0, "Ram size for your vm"},
+    {"vcpu", 'c', 0, 0, "Number of cpu for your vm"},
     {"image", 'i', "IMAGE", 0, "linux kernel bzimage"},
     {0}};
 
 /* Used by main to communicate with parse_opt. */
 struct arguments {
-  int verbose, ram_size, no_cpu;
+  int verbose, memory, vcpu;
   char *image_file;
 };
 
@@ -56,9 +56,9 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     arguments->image_file = arg;
     break;
   case 'c':
-    arguments->no_cpu = atoi(arg); /* TODO */
+    arguments->vcpu = atoi(arg); /* TODO */
   case 'r':
-    arguments->ram_size = atoi(arg); /* TODO */
+    arguments->memory = atoi(arg); /* TODO */
 
   default:
     return ARGP_ERR_UNKNOWN;
