@@ -13,6 +13,7 @@ struct vm {
   size_t ram_size;
   struct kvm_run *run;
   struct kvm_sregs sregs;
+  char *initramfs;
 };
 
 int vm_create(struct vm *v);

@@ -68,6 +68,31 @@ void *kernel_load(struct vm *vm, char *path) {
   kernel_size = image_size - offset_kernel;
 
   memcpy(ram_addr + 0x100000, mem + offset_kernel, kernel_size);
+
+  // load initramfs
+  if (vm->initramfs != NULL) {
+    int fd_initram = open(vm->initramfs, O_RDWR);
+    if (fd_initram < -1)
+      err(1, "open initramfs image failed");
+
+    struct stat statbuf;
+    fstat(fd_initram, &statbuf);
+    size_t initram_size = statbuf.st_size;
+
+    uint8_t *init_memory = mmap(NULL, initram_size, PROT_READ | PROT_WRITE,
+                                MAP_SHARED, fd_initram, 0);
+    if (init_memory == MAP_FAILED)
+      errx(1, "initramfs: failed loading image");
+
+    memcpy(ram_addr + kernel_size + 0x100000, init_memory, statbuf.st_size);
+    struct boot_params *initramfs_boot_param =
+        (struct boot_params *)(ram_addr + 0x6000 + 0x10000);
+    struct setup_header *setup_header = &(initramfs_boot_param->hdr);
+
+    setup_header->ramdisk_image = (uint64_t)(kernel_size + 0x100000);
+    setup_header->ramdisk_size = statbuf.st_size;
+  }
+
   return ram_addr;
 }
 
