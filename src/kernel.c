@@ -21,7 +21,8 @@
 static char *kernel_opts = KERNEL_OPTS;
 
 void *kernel_setup_memory(struct vm *vm) {
-  vm->ram_size = MEMORY_SIZE;
+  if (vm->ram_size == 0)
+    vm->ram_size = MEMORY_SIZE;
   void *mem = mmap(NULL, vm->ram_size, PROT_READ | PROT_WRITE | PROT_EXEC,
                    MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
   if (mem == MAP_FAILED) {
@@ -30,7 +31,7 @@ void *kernel_setup_memory(struct vm *vm) {
   struct kvm_userspace_memory_region region = {
       .slot = 0,
       .guest_phys_addr = 0x0,
-      .memory_size = MEMORY_SIZE,
+      .memory_size = vm->ram_size,
       .userspace_addr = (uint64_t)mem,
   };
   int ret = ioctl(vm->fd_vm, KVM_SET_USER_MEMORY_REGION, &region);

@@ -88,6 +88,9 @@ int main(int argc, char **argv) {
   if (arguments.initrd_file != NULL)
     core_vm.initramfs = arguments.initrd_file;
 
+  if (arguments.memory != 0)
+    core_vm.ram_size = arguments.memory;
+
   ret = vm_create(&core_vm);
   ERROR(ret)
   ret = vm_init(&core_vm);
