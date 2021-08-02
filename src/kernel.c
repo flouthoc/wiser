@@ -64,7 +64,12 @@ void *kernel_load(struct vm *vm, char *path) {
 
   char *ram_addr = kernel_setup_memory(vm);
   void *end_header = mem + 0x0202 + *((char *)mem + 0x0201);
-  kernel_init_boot(setup_header, end_header, ram_addr);
+
+  // pass kernel opts
+  if (vm->kernel_opts != NULL)
+    kernel_opts = vm->kernel_opts;
+
+  kernel_init_boot(setup_header, end_header, ram_addr, kernel_opts);
   // write kernel
   kernel_size = image_size - offset_kernel;
 
@@ -105,7 +110,7 @@ uint64_t kernel_get_offset(struct setup_header *setup_header) {
 }
 
 int kernel_init_boot(struct setup_header *setup_header, void *end_setup_header,
-                     char *ram_addr) {
+                     char *ram_addr, char *kernel_options) {
   struct boot_params *params = (struct boot_params *)(ram_addr + 0x6000);
   memset(params, 0, sizeof(struct boot_params));
 
@@ -132,7 +137,7 @@ int kernel_init_boot(struct setup_header *setup_header, void *end_setup_header,
 
   params->e820_entries = idx;
   params->hdr.cmd_line_ptr = 0x6000 + 0x10000;
-  memcpy(ram_addr + 0x6000 + 0x10000, kernel_opts, strlen(kernel_opts));
+  memcpy(ram_addr + 0x6000 + 0x10000, kernel_options, strlen(kernel_opts));
   return 0;
 }
 
