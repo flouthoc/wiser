@@ -35,6 +35,7 @@ static struct argp_option options[] = {
     {"vcpu", 'c', 0, 0, "Number of cpu for your vm"},
     {"image", 'i', "IMAGE", 0, "linux kernel bzimage"},
     {"initramfs", 'z', "PATH", 0, "load initial ram disk"},
+    {"kernel-opts", 'k', "OPTIONS", 0, "kernel options"},
     {0}};
 
 /* Used by main to communicate with parse_opt. */
@@ -42,6 +43,7 @@ struct arguments {
   int verbose, memory, vcpu;
   char *image_file;
   char *initrd_file;
+  char *kernel_opts;
 };
 
 /* Parse a single option. */
@@ -62,9 +64,13 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     break;
   case 'c':
     arguments->vcpu = atoi(arg); /* TODO */
+    break;
   case 'r':
-    arguments->memory = atoi(arg); /* TODO */
-
+    arguments->memory = atoi(arg);
+    break;
+  case 'k':
+    arguments->kernel_opts = arg;
+    break;
   default:
     return ARGP_ERR_UNKNOWN;
   }
@@ -87,6 +93,9 @@ int main(int argc, char **argv) {
 
   if (arguments.initrd_file != NULL)
     core_vm.initramfs = arguments.initrd_file;
+
+  if (arguments.kernel_opts != NULL)
+    core_vm.kernel_opts = arguments.kernel_opts;
 
   if (arguments.memory != 0)
     core_vm.ram_size = arguments.memory;

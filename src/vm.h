@@ -14,6 +14,7 @@ struct vm {
   struct kvm_run *run;
   struct kvm_sregs sregs;
   char *initramfs;
+  char *kernel_opts;
 };
 
 int vm_create(struct vm *v);
