@@ -31,6 +31,10 @@ int vm_create(struct vm *vm) {
 int vm_init(struct vm *vm) {
   int ret;
 
+  ret = ioctl(vm->fd_vm, KVM_SET_TSS_ADDR, 0xfffbd000);
+  if (ret < 0)
+    err(1, "KVM_SET_TESS_ADDR");
+
   struct kvm_pit_config pit_conf;
   pit_conf.flags = 0;
 
