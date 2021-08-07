@@ -1,6 +1,6 @@
 # wiser
 
- A very minimal type-2 hypervisor built using Linux Kernel Virtual Machine for Linux.
+ A very minimal vmm built using Linux Kernel Virtual Machine for Linux.
  
  Following project is under-development expect unfinished components.
  
