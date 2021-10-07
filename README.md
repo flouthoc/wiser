@@ -34,7 +34,8 @@ Report bugs to https://github.com/flouthoc/wiser/issues.
 Path to linux kernel bzImage. The bzImage file is in a specific format. It contains concatenated ```bootsect.o + setup.o + misc.o + piggy.o```.
 
 ## Roadmap
-* Allow users to load initramfs.
+~~ * Allow users to load initramfs. ~~
+* Add basic support for Apple hypervisor
 
 ## References
 * https://github.com/kvmtool/kvmtool
